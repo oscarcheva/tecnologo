@@ -1,0 +1,14 @@
+// ---------- input + input
+
+INPUT
+STORE ONE
+
+INPUT
+ADD ONE
+STORE RESULT
+
+Output
+HALT
+
+ONE, DEC 0
+RESULT, DEC 0

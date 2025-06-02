@@ -1,0 +1,17 @@
+// --- Revisar input 0
+
+LOOP, Input
+STORE ONE
+
+LOAD ONE
+SKIPCOND 400
+JUMP LOOP
+
+// Solo para mostrar un mensaje tipo de salida
+LOAD TWO
+OUTPUT
+
+HALT
+
+ONE, DEC 0
+TWO, DEC 10

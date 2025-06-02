@@ -1,0 +1,39 @@
+// ---------- multiplicacion por input
+
+INPUT 
+STORE ONE
+
+INPUT 
+STORE TWO
+
+// Seteamos el contador al valor del multiplicador
+LOAD TWO
+STORE COUNTER
+
+// Sumamos una vez, como si fuese una multiplicacion directa, ej 2*2
+LOOP, LOAD RESULT
+ADD ONE
+STORE RESULT
+
+// Sustraemos uno al contador
+LOAD COUNTER
+SUBT DECREMENT
+STORE COUNTER
+
+// Revisamos si el contador es 0, si no es, entonces no se ha multiplicado la cantidad de veces del multiplicando y vuelve a iniciar el ciclo
+// de multiplicacion
+LOAD COUNTER
+SKIPCOND 400
+JUMP LOOP
+
+// Traemos el resultado final
+LOAD RESULT
+
+OUTPUT
+HALT
+
+ONE, DEC 0
+TWO, DEC 0
+DECREMENT, DEC 1
+COUNTER, DEC 0
+RESULT, DEC 0

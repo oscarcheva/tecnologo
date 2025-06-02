@@ -1,0 +1,12 @@
+// ---------- resta simple
+
+LOAD ONE
+SUBT TWO
+STORE RESULT
+
+Output
+HALT
+
+ONE, DEC 5
+TWO, DEC 12
+RESULT, DEC 0
