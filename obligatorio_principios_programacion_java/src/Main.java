@@ -23,6 +23,7 @@ public class Main {
             System.out.println("The balance must be between 50 y 1000");
 
         choice = startGame();
+
         while (choice != 4 || balance > MINIMAL_BET) {
             outcome = random.nextInt(3) + 1;
 
