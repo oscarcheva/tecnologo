@@ -1,9 +1,7 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
 
-    final static int BALANCE_LIMIT = 1000;
     final static int MINIMAL_BET = 50;
     final static int GAME_SIZE = 5;
     final static int BALANCE = 1000;
@@ -12,7 +10,7 @@ public class Main {
     static List<Bet> bets = new ArrayList<>();
 
 
-    public static Scanner sc = new Scanner(System.in);
+    static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
 
@@ -37,7 +35,7 @@ public class Main {
         }
     }
 
-    public static void testData() {
+    static void testData() {
 
         players.add(new Player(63333333, "Carleto", "Carlos", "Ramírez", true, 1000));
         players.add(new Player(52222222, "Marita", "María", "Gómez", true, 1000));
@@ -53,7 +51,7 @@ public class Main {
         bets.add(new Bet(700, false, "Juanca", 1000));
     }
 
-    public static void playerManagement() {
+    static void playerManagement() {
         int choice = 0;
 
         while (choice != 4) {
@@ -76,7 +74,7 @@ public class Main {
     }
 
 
-    public static void createPlayer() {
+     static void createPlayer() {
 
         System.out.println("Please enter the player's nickname");
 
@@ -118,7 +116,7 @@ public class Main {
 
     }
 
-    public static Player getPlayer(String nickName) {
+     static Player getPlayer(String nickName) {
 
         return players.stream()
                 .filter(p -> p.getNickName().equalsIgnoreCase(nickName))
@@ -126,11 +124,11 @@ public class Main {
                 .orElse(null);
     }
 
-    public static boolean checkValidID(long id) {
+     static boolean checkValidID(long id) {
         return id < 1111111 || id > 99999999;
     }
 
-    public static void updatePlayer() {
+     static void updatePlayer() {
 
         System.out.println("Please enter the player's nickname");
 
@@ -164,7 +162,7 @@ public class Main {
         System.out.println("Player updated successfully");
     }
 
-    public static void updatePlayer(Player updatedPlayer) {
+     static void updatePlayer(Player updatedPlayer) {
 
         players.stream()
                 .filter(player -> player.getNickName()
@@ -179,7 +177,7 @@ public class Main {
                 });
     }
 
-    public static void deletePlayer() {
+     static void deletePlayer() {
 
         System.out.println("Please enter the player's nickname");
 
@@ -196,7 +194,7 @@ public class Main {
         System.out.println("Player removed successfully");
     }
 
-    public static void gameQueries() {
+     static void gameQueries() {
         int choice = 0;
 
         while (choice != 4) {
@@ -218,7 +216,7 @@ public class Main {
         }
     }
 
-    public static void sortPlayers(){
+     static void sortPlayers(){
 
         for (int i = 1; i<players.size();i++)
         {
@@ -237,7 +235,7 @@ public class Main {
         }
     }
 
-    public static void displayAllPlayers() {
+     static void displayAllPlayers() {
 
         String format = "| %-15s | %-15s | %-12s | %-10s |%n";
         String line = "+-----------------+-----------------+--------------+------------+";
@@ -256,7 +254,7 @@ public class Main {
 
     }
 
-    public static void displayAllBets() {
+     static void displayAllBets() {
         String format = "| %-15s | %-15s | %-12s | %-20s |%n";
         String line = "+-----------------+-----------------+--------------+----------------------+";
 
@@ -278,7 +276,7 @@ public class Main {
         System.out.println(line);
     }
 
-    public static void displayBetsByPlayers() {
+     static void displayBetsByPlayers() {
         System.out.println("Please enter the player's nickname");
         String format = "| %-15s | %-12s | %-21s |%n";
         String line = "+-----------------+-----------------+--------------------+";
@@ -294,14 +292,11 @@ public class Main {
                 System.out.println(line);
                 System.out.printf(format, "Amount Gambled", "Won?", "Remaining Balance");
                 System.out.println(line);
-                playersBets.forEach(bet -> {
-                    System.out.printf(
-                            format,
-                            bet.getBetAmount(),
-                            bet.isOutcome() ? "Won!" : "Lost",
-                            bet.getRemainingBalance());
-
-                });
+                playersBets.forEach(bet -> System.out.printf(
+                        format,
+                        bet.getBetAmount(),
+                        bet.isOutcome() ? "Won!" : "Lost",
+                        bet.getRemainingBalance()));
                 System.out.println(line);
 
             }
@@ -367,11 +362,6 @@ public class Main {
             System.out.println("Money talks, and you cannot talk");
         else
             System.out.println("See you later alligator");
-    }
-
-    static int initialBalance() {
-        System.out.println("Now, how much money do you have?");
-        return sc.nextInt();
     }
 
     static int createCups() {
