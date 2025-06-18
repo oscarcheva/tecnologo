@@ -1,10 +1,12 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
     final static int BALANCE_LIMIT = 1000;
     final static int MINIMAL_BET = 50;
     final static int GAME_SIZE = 5;
+    final static int BALANCE = 1000;
 
     static List<Player> players = new ArrayList<>();
     static List<Bet> bets = new ArrayList<>();
@@ -39,7 +41,9 @@ public class Main {
 
         players.add(new Player(63333333, "Carleto", "Carlos", "Ramírez", true, 1000));
         players.add(new Player(52222222, "Marita", "María", "Gómez", true, 1000));
-        players.add(new Player(41111111, "Juanca", "Juan Carlos", "Fernández", false, 1000));
+        players.add(new Player(41111111, "Juanca", "Juan Carlos", "Fernández", true, 1000));
+        players.add(new Player(41111111, "Auanca", "Juan Carlos", "Fernández", true, 1000));
+        players.add(new Player(41111111, "Buanca", "Juan Carlos", "Fernández", true, 1000));
 
         bets.add(new Bet(150, false, "Carleto", 850));
         bets.add(new Bet(150, true, "Marita", 1150));
@@ -79,15 +83,12 @@ public class Main {
         Player checkPlayer = getPlayer(sc.next());
         if (checkPlayer != null) {
             System.out.println("A player already exists with the provided nickname");
-            if (!checkPlayer.isActive())
+            if (!checkPlayer.isActive()) {
+                checkPlayer.setActive(true);
+                updatePlayer(checkPlayer);
                 System.out.println("The player has been reactivated");
-
-            players.stream()
-                    .filter(player -> player.getNickName()
-                            .equalsIgnoreCase(checkPlayer.getNickName()))
-                    .findFirst()
-                    .ifPresent(player -> player.setActive(true));
-            return;
+                return;
+            }
         }
 
         Player DTOPlayer = new Player();
@@ -110,7 +111,7 @@ public class Main {
         DTOPlayer.setBalance(1000);
         DTOPlayer.setActive(true);
 
-        Player player = new Player(DTOPlayer.getId(), DTOPlayer.getNickName(), DTOPlayer.getFirstName(), DTOPlayer.getLastName(), DTOPlayer.isActive(), DTOPlayer.getBalance());
+        Player player = new Player(DTOPlayer.getId(), DTOPlayer.getNickName(), DTOPlayer.getFirstName(), DTOPlayer.getLastName(), DTOPlayer.isActive(), BALANCE);
         players.add(player);
 
         System.out.println("Player created successfully");
@@ -163,6 +164,21 @@ public class Main {
         System.out.println("Player updated successfully");
     }
 
+    public static void updatePlayer(Player updatedPlayer) {
+
+        players.stream()
+                .filter(player -> player.getNickName()
+                        .equalsIgnoreCase(updatedPlayer.getNickName()))
+                .findFirst()
+                .ifPresent(player -> {
+                    player.setFirstName(updatedPlayer.getFirstName());
+                    player.setLastName(updatedPlayer.getLastName());
+                    player.setId(updatedPlayer.getId());
+                    player.setBalance(updatedPlayer.getBalance());
+                    player.setActive(updatedPlayer.isActive());
+                });
+    }
+
     public static void deletePlayer() {
 
         System.out.println("Please enter the player's nickname");
@@ -195,43 +211,105 @@ public class Main {
             switch (choice) {
                 case 1 -> displayAllPlayers();
                 case 2 -> displayAllBets();
-                case 3 -> deletePlayer();
+                case 3 -> displayBetsByPlayers();
                 case 4 -> System.out.println("Going back...");
                 default -> System.out.println("❌ Invalid option. Please try again.");
             }
         }
     }
 
-    public static void displayAllPlayers() {
-        System.out.printf("%-15s %-15s %-15s %-15s %n", "Nickname", "First Name", "Last Name", "Balance");
+    public static void sortPlayers(){
 
-        for (Player player : players) {
-            if (player.isActive())
-                System.out.printf("%-15s %-15s %-15s %-15s %n", player.getNickName(), player.getFirstName(), player.getLastName(), player.getBalance());
+        for (int i = 1; i<players.size();i++)
+        {
+            int pointer = i;
+            Player checker = players.get(i);
+            while(pointer>0){
+                Player checked = players.get(pointer-1);
+                if(checked.getNickName().compareTo(checker.getNickName())>0) {
+                    players.set(pointer, checked);
+                    players.set(pointer - 1, checker);
+                    pointer--;
+                }
+                else
+                    pointer=0;
+            }
         }
     }
 
+    public static void displayAllPlayers() {
+
+        String format = "| %-15s | %-15s | %-12s | %-10s |%n";
+        String line = "+-----------------+-----------------+--------------+------------+";
+        System.out.println(line);
+        System.out.printf(format, "Nickname", "First Name", "Last Name", "Balance");
+        System.out.println(line);
+
+        sortPlayers();
+
+        players.forEach(player -> {
+                    if (player.isActive())
+                        System.out.printf(format, player.getNickName(), player.getFirstName(), player.getLastName(), player.getBalance());
+                });
+
+        System.out.println(line);
+
+    }
+
     public static void displayAllBets() {
-        System.out.printf("%-15s %-17s %-15s %-20s%n", "Nickname", "Amount Gambled", "Won?", "Remaining Balance");
+        String format = "| %-15s | %-15s | %-12s | %-20s |%n";
+        String line = "+-----------------+-----------------+--------------+----------------------+";
+
+        System.out.println(line);
+        System.out.printf(format, "Nickname", "Amount Gambled", "Won?", "Remaining Balance");
+        System.out.println(line);
 
         for (Bet bet : bets) {
             System.out.printf(
-                    "%-15s %-17d %-15s %-20d%n",
+                    format,
                     bet.getNickName(),
                     bet.getBetAmount(),
                     bet.isOutcome() ? "Player won" : "Player lost",
                     bet.getRemainingBalance()
+
             );
         }
+
+        System.out.println(line);
     }
 
     public static void displayBetsByPlayers() {
+        System.out.println("Please enter the player's nickname");
+        String format = "| %-15s | %-12s | %-21s |%n";
+        String line = "+-----------------+-----------------+--------------------+";
+        Player player = getPlayer(sc.next());
 
+        if (player != null) {
+            System.out.printf("The bets for the player ** %s ** are: %n", player.getNickName());
+
+            List<Bet> playersBets = bets.stream()
+                    .filter(bet -> bet.getNickName().equals(player.getNickName()))
+                    .toList();
+            if (!playersBets.isEmpty()) {
+                System.out.println(line);
+                System.out.printf(format, "Amount Gambled", "Won?", "Remaining Balance");
+                System.out.println(line);
+                playersBets.forEach(bet -> {
+                    System.out.printf(
+                            format,
+                            bet.getBetAmount(),
+                            bet.isOutcome() ? "Won!" : "Lost",
+                            bet.getRemainingBalance());
+
+                });
+                System.out.println(line);
+
+            }
+        }
     }
 
     private static void playGame() {
-        int balance;
-        int bet;
+        int amountGambled;
         int choice;
         int outcome;
         boolean hit;
@@ -239,23 +317,23 @@ public class Main {
         Random random = new Random();
 
         System.out.println("Welcome, we will start to play now. For each bet you must state with a 1 2 or 3, in which cup the ball is located. \nRemember that you can also chose to leave the game by tiping " + (GAME_SIZE + 1));
-        balance = initialBalance();
-
-        while (balance < MINIMAL_BET || balance > BALANCE_LIMIT) {
-            System.out.println("The balance must be between 50 y 1000");
-            balance = initialBalance();
+        System.out.println("Please enter your nickname");
+        Player player = getPlayer(sc.next());
+        if (player == null) {
+            System.out.println("A player does not exists with that nickName");
+            return;
         }
         choice = createCups();
 
         while (choice != (GAME_SIZE + 1)) {
             outcome = random.nextInt(3) + 1;
 
-            bet = placeBet();
+            amountGambled = placeBet();
 
-            while (bet < MINIMAL_BET || bet > balance) {
-                System.out.printf("You can only place your bet between %d y %d %n", MINIMAL_BET, balance);
+            while (amountGambled < MINIMAL_BET) {
+                System.out.printf("You can only place your bet between %d y %d %n", MINIMAL_BET, player.getBalance());
                 System.out.println("How much would you like to bet?");
-                bet = placeBet();
+                amountGambled = placeBet();
             }
 
             createWinningCup(outcome);
@@ -266,15 +344,18 @@ public class Main {
             } else {
                 System.out.println("Bummer, You have lost");
             }
-            balance = updateBalance(balance, hit, bet);
-            System.out.printf("Your current balance is: %d \n", balance);
+            player.setBalance(updateBalance(player.getBalance(), hit, amountGambled));
+            updatePlayer(player);
+            System.out.printf("Your current balance is: %d \n", player.getBalance());
 
-            if (balance < MINIMAL_BET)
+            bets.add(new Bet(amountGambled, hit, player.getNickName(), player.getBalance()));
+
+            if (player.getBalance() < MINIMAL_BET)
                 break;
             else {
                 choice = createCups();
 
-                if (bet > 200 && !hit && choice == (GAME_SIZE + 1)) {
+                if (amountGambled > 200 && !hit && choice == (GAME_SIZE + 1)) {
                     while (choice == (GAME_SIZE + 1)) {
                         System.out.println("You are a proud person so you cannot leave, you must play again");
                         choice = createCups();
@@ -282,7 +363,7 @@ public class Main {
                 }
             }
         }
-        if (balance < MINIMAL_BET)
+        if (player.getBalance() < MINIMAL_BET)
             System.out.println("Money talks, and you cannot talk");
         else
             System.out.println("See you later alligator");
