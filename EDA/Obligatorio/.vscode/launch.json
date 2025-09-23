@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Principal",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/principal",   // path to your executable
+            "args": [],                                  // any command-line arguments
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",                 // working directory
+            "environment": [],
+            "externalConsole": true,                     // opens a terminal for input/output
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",           // gdb inside WSL
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

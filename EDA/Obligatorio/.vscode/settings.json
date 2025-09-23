@@ -1,0 +1,19 @@
+{
+    // Enable format on save
+    "editor.formatOnSave": true,
+
+    // Use clang-format for C/C++
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "[c]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+
+    // Optional: Use the clang-format executable from WSL
+    "C_Cpp.clang_format_path": "/usr/bin/clang-format",
+    "files.associations": {
+        "regex": "cpp",
+        "cstdlib": "cpp"
+    }
+}
