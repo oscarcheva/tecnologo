@@ -36,8 +36,6 @@ Cadena crearCadenaVacia()
 void agregarCaracteresCadena(Cadena &cadena, char *texto)
 {
 
-    if (!esVaciaCadenaCaracteres(cadena))
-        return;
     int contador = 0;
     NodoCadena anterior = NULL;
     while (texto[contador] != '\0')

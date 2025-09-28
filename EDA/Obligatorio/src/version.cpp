@@ -56,58 +56,72 @@ Version crearVersionVacia()
 
 void crearVersion(Version &version, char *num_version)
 {
-    Version actual = obtenerVersion(version, num_version);
-    if (version->anterior == NULL && strcmp(num_version, "1") != 0)
-        return;
-    agregarCaracteresCadena(version->numero_version, num_version);
-    int contador = 1;
-    bool iguales = false;
+    int numeroVersion = atoi(num_version);
 
-    while (actual != NULL && !iguales)
+    if (version->numero_version == NULL)
     {
-        char *numeroTemporal = convertirCadenaArregloChar(actual->numero_version);
-        iguales = (strcmp(num_version, numeroTemporal) == 0);
-        delete[] numeroTemporal;
-        if (!iguales)
-            actual = actual->siguiente;
+        if (numeroVersion != 1)
+            return;
+
+        Version nueva = crearVersionVacia();
+        nueva->numero_version = crearCadenaVacia();
+        agregarCaracteresCadena(nueva->numero_version, num_version);
+        nueva->siguiente = NULL;
+        nueva->anterior = NULL;
+        version = nueva;
+        return;
     }
-    Version ultimo = NULL;
-    if (actual != NULL)
+
+    Version actual = version;
+    while (actual != NULL)
     {
-        while (actual != NULL)
+        char *charNumero = convertirCadenaArregloChar(actual->numero_version);
+        int numero = atoi(charNumero);
+        delete[] charNumero;
+
+        if (numero >= numeroVersion)
         {
-            char *charNumero = convertirCadenaArregloChar(actual->numero_version);
-            int numero = atoi(charNumero);
-            numero -= 1;
-            int necesario = snprintf(nullptr, 0, "%d", numero) + 1;
-            char *nuevoNumero = new char[necesario];
-            snprintf(nuevoNumero, necesario, "%d", numero);
+            numero += 1;
             destruirCadena(actual->numero_version);
             actual->numero_version = crearCadenaVacia();
-            agregarCaracteresCadena(actual->numero_version, nuevoNumero);
-            delete[] nuevoNumero;
-            delete[] charNumero;
-            ultimo = actual;
-            actual = actual->siguiente;
+
+            char buffer[16];
+            snprintf(buffer, sizeof(buffer), "%d", numero);
+            agregarCaracteresCadena(actual->numero_version, buffer);
         }
+
+        actual = actual->siguiente;
     }
-    if (ultimo != NULL)
+
+    Version nueva = crearVersionVacia();
+    nueva->numero_version = crearCadenaVacia();
+    agregarCaracteresCadena(nueva->numero_version, num_version);
+
+    actual = version;
+    Version anterior = NULL;
+    while (actual != NULL)
     {
-        version->siguiente = ultimo;
-        version->anterior = ultimo->anterior;
+        char *charNumero = convertirCadenaArregloChar(actual->numero_version);
+        int numero = atoi(charNumero);
+        delete[] charNumero;
 
-        if (ultimo->anterior != NULL)
-        {
-            ultimo->anterior->siguiente = version;
-        }
+        if (numero > numeroVersion)
+            break;
 
-        ultimo->anterior = version;
+        anterior = actual;
+        actual = actual->siguiente;
     }
+
+    nueva->siguiente = actual;
+    nueva->anterior = anterior;
+
+    if (anterior != NULL)
+        anterior->siguiente = nueva;
     else
-    {
-        version->siguiente = NULL;
-        version->anterior = NULL;
-    }
+        version = nueva;
+
+    if (actual != NULL)
+        actual->anterior = nueva;
 }
 
 Version obtenerVersion(Version &version, char *numVersion)
@@ -130,7 +144,7 @@ void agregarFilaVersion(Version &version, char *numeroVersion, char *textoFila, 
 {
     Version actual = obtenerVersion(version, numeroVersion);
 
-    if (actual->inicioLineas == NULL && numLinea == 1)
+    if (actual->inicioLineas == NULL)
     {
         Linea linea = crearLineaVacia();
         actual->inicioLineas = linea;
@@ -143,9 +157,24 @@ void imprimirVersion(Version version, char *numeroVersion)
     Version actual = obtenerVersion(version, numeroVersion);
     if (actual == NULL)
         return;
-    char *charNumVersion = nombreVersion(actual);
-    printf("%s\n", charNumVersion);
-    delete[] charNumVersion;
+    unsigned int numLinea = getNumeroLinea(actual->inicioLineas);
+    if (numLinea == 0)
+    {
+        printf("No hay lineas en la version\n");
+    }
+    Linea lineaActual = actual->inicioLineas;
+    numeroVersion = convertirCadenaArregloChar(actual->numero_version);
+    printf("%s\n", numeroVersion);
+    delete[] numeroVersion;
+    while (lineaActual != NULL)
+    {
+        char *contenidoLinea = obtenerTextoLinea(lineaActual, numLinea);
+        printf("%d   ", numLinea);
+        printf("%s\n", contenidoLinea);
+        numLinea++;
+        delete[] contenidoLinea;
+        lineaActual = siguienteLinea(lineaActual);
+    }
 }
 
 Version siguienteVersion(Version version)
@@ -183,13 +212,17 @@ int numeroUltimaVersion(Version version)
 
 int numeroUltimaLineaVersion(Version version)
 {
-    Version actual = obtenerVersion(version, convertirCadenaArregloChar(version->numero_version));
+    Version actual = version;
     Linea lineaActual = actual->inicioLineas;
-    while (lineaActual != NULL)
+    if (lineaActual == NULL)
+        return 0;
+    Linea siguiente = siguienteLinea(lineaActual);
+    while (siguiente != NULL)
     {
-        lineaActual = siguienteLinea(lineaActual);
+        lineaActual = siguiente;
+        siguiente = siguienteLinea(lineaActual);
     }
-    lineaActual = anteriorLinea(lineaActual);
+
     return getNumeroLinea(lineaActual);
 }
 
@@ -234,7 +267,7 @@ void destruirVersion(Version &version, char *numeroVersion)
         char *charNumero = convertirCadenaArregloChar(siguiente->numero_version);
         int numero = atoi(charNumero);
         numero -= 1;
-        int necesario = snprintf(nullptr, 0, "%d", numero) + 1;
+        int necesario = snprintf(NULL, 0, "%d", numero) + 1;
         char *nuevoNumero = new char[necesario];
         snprintf(nuevoNumero, necesario, "%d", numero);
         destruirCadena(siguiente->numero_version);

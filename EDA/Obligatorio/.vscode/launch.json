@@ -2,24 +2,34 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Principal",
+            "name": "Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/principal",   // path to your executable
-            "args": [],                                  // any command-line arguments
+            "program": "C:/Repos/tecnologo/EDA/Obligatorio/principal.exe",
+            "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",                 // working directory
-            "environment": [],
-            "externalConsole": true,                     // opens a terminal for input/output
+            "cwd": "C:/Repos/tecnologo/EDA/Obligatorio",
+            "externalConsole": true,
             "MIMode": "gdb",
-            "miDebuggerPath": "/usr/bin/gdb",           // gdb inside WSL
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
+            "miDebuggerPath": "C:/cygwin64/bin/gdb.exe",
+            "preLaunchTask": "make"
+        },
+        {
+            "name": "Run",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "C:/cygwin64/bin/bash.exe",
+            "args": [
+                "-l",
+                "-c",
+                "cd /cygdrive/c/Repos/tecnologo/EDA/Obligatorio && ./principal.exe; echo 'Press ENTER to exit...'; read"
+            ],
+            "cwd": "C:/Obligatorio",
+            "externalConsole": true,
+            "stopAtEntry": false,
+            "MIMode": "gdb",
+            "setupCommands": [],
+            "preLaunchTask": "make"
         }
     ]
 }

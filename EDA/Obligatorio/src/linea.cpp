@@ -4,6 +4,9 @@
 #include "../include/version.h"
 
 #include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 struct _rep_linea
 {
@@ -42,41 +45,65 @@ Linea crearLineaVacia()
     Linea nuevaLinea = new _rep_linea;
     nuevaLinea->siguiente = NULL;
     nuevaLinea->anterior = NULL;
+    nuevaLinea->numero = 0;
+    nuevaLinea->cadena = NULL;
     return nuevaLinea;
 }
 
 void insertarLinea(Linea &linea, char *texto, unsigned int numLinea)
 {
-    if (linea->siguiente == NULL && numLinea != 1)
-        return;
-    Linea actual = linea;
-    int contador = 1;
-    while (actual != NULL && contador != numLinea - 1)
+    if (linea->numero == 0)
     {
-        actual = actual->siguiente;
-        contador++;
-    }
-    if (actual == NULL || actual->numero != numLinea - 1)
+        if (numLinea != 1)
+            return;
+        linea->cadena = crearCadenaVacia();
+        agregarCaracteresCadena(linea->cadena, texto);
+        linea->numero = 1;
         return;
+    }
 
-    linea->cadena = crearCadenaVacia();
-    agregarCaracteresCadena(linea->cadena, texto);
-    linea->numero = numLinea;
-    unsigned int posicion = numLinea;
-    linea->anterior = actual;
-    linea->siguiente = actual->siguiente;
-    if (actual->siguiente != NULL)
-        actual->siguiente->anterior = linea;
-    actual->siguiente = linea;
+    Linea actual = linea;
 
-    Linea proxima = linea->siguiente;
+    Linea nueva = crearLineaVacia();
+
+    nueva->cadena = crearCadenaVacia();
+    agregarCaracteresCadena(nueva->cadena, texto);
+    nueva->numero = numLinea;
+
+    if (nueva->numero == actual->numero)
+    {
+        nueva->siguiente = actual;
+        nueva->anterior = NULL;
+        actual->anterior = nueva;
+        linea = nueva;
+    }
+
+    else
+    {
+        while (actual->siguiente != NULL && actual->numero != numLinea)
+            actual = actual->siguiente;
+
+        if (nueva->numero == 2 && actual->numero == 1)
+        {
+            nueva->siguiente = actual->siguiente;
+            nueva->anterior = actual;
+            actual->siguiente = nueva;
+        }
+        else
+        {
+            if (actual->siguiente != NULL)
+                actual->siguiente->anterior = nueva;
+            actual->anterior->siguiente = nueva;
+            nueva->anterior = actual->anterior;
+            actual->anterior = nueva;
+            nueva->siguiente = actual;
+        }
+    }
+
+    Linea proxima = nueva->siguiente;
     while (proxima != NULL)
     {
-        if (proxima->numero == posicion)
-        {
-            proxima->numero = proxima->numero + 1;
-            posicion++;
-        }
+        proxima->numero += 1;
         proxima = proxima->siguiente;
     }
 }
@@ -120,12 +147,7 @@ char *obtenerTextoLinea(Linea linea, unsigned int numLinea)
 {
     if (linea->numero == numLinea)
         return convertirCadenaArregloChar(linea->cadena);
-    Linea lineaActual = linea->anterior;
-    while (lineaActual != NULL)
-    {
-        lineaActual = lineaActual->anterior;
-    }
-
+    Linea lineaActual = linea;
     while (lineaActual != NULL)
     {
         if (lineaActual->numero == numLinea)
@@ -143,6 +165,8 @@ bool esVaciaLinea(Linea linea)
 
 bool existeNumeroLinea(Linea linea, unsigned int numLinea)
 {
+    if (linea == NULL)
+        return false;
     char *verificador = obtenerTextoLinea(linea, numLinea);
     bool check = verificador != NULL;
     delete[] verificador;
@@ -153,7 +177,7 @@ bool sonIgualesLineas(Linea linea1, Linea linea2)
 {
     char *verificadorLinea1 = obtenerTextoLinea(linea1, linea1->numero);
     char *verificadorLinea2 = obtenerTextoLinea(linea2, linea2->numero);
-    int contador = 0;
+    unsigned int contador = 0;
     while (verificadorLinea1[contador] != '\0' && verificadorLinea2[contador] != '\0')
     {
         if (verificadorLinea1[contador] != verificadorLinea2[contador])
@@ -173,35 +197,51 @@ bool sonIgualesLineas(Linea linea1, Linea linea2)
 void eliminarLinea(Linea &linea, unsigned int numLinea)
 {
     if (!existeNumeroLinea(linea, numLinea))
-        return;
-    Linea lineaAEliminar = linea;
-    int contador = 1;
-    while (lineaAEliminar != NULL && contador != numLinea)
     {
-        lineaAEliminar = lineaAEliminar->siguiente;
-        contador++;
+        printf("La linea no existe\n");
+        return;
     }
-    if (lineaAEliminar == NULL || lineaAEliminar->numero != numLinea)
+    Linea actual = linea;
+
+    while (actual != NULL && actual->numero != numLinea)
+        actual = actual->siguiente;
+
+    if (actual == NULL)
         return;
 
-    if (lineaAEliminar->siguiente != NULL)
-        lineaAEliminar->siguiente->anterior = lineaAEliminar->anterior;
-    if (lineaAEliminar->anterior != NULL)
-        lineaAEliminar->anterior->siguiente = lineaAEliminar->siguiente;
+    if (actual->anterior != NULL)
+        actual->anterior->siguiente = actual->siguiente;
+    else if (actual->siguiente != NULL)
+    {
+        actual->siguiente->anterior = actual->anterior;
+        Linea proxima = actual->siguiente;
+        while (proxima != NULL)
+        {
+            proxima->numero -= 1;
+            proxima = proxima->siguiente;
+        }
+        actual = linea->siguiente;
+        destruirCadena(linea->cadena);
+        delete linea;
+        linea = actual;
+        return;
+    }
     else
-        linea = lineaAEliminar->siguiente;
+    {
+        destruirCadena(actual->cadena);
+        delete linea;
+        linea = NULL;
+        return;
+    }
 
-    unsigned int posicion = numLinea;
-    Linea proxima = lineaAEliminar->siguiente;
+    Linea proxima = actual->siguiente;
     while (proxima != NULL)
     {
-
-        proxima->numero--;
+        proxima->numero -= 1;
         proxima = proxima->siguiente;
     }
-
-    destruirCadena(lineaAEliminar->cadena);
-    delete lineaAEliminar;
+    destruirCadena(actual->cadena);
+    delete actual;
 }
 
 void destruirLinea(Linea &linea)

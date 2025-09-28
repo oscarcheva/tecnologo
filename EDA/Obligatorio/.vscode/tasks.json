@@ -2,31 +2,14 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "make",
             "type": "shell",
-            "command": "make",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": ["$gcc"]
-        },
-        {
-            "label": "run",
-            "type": "shell",
-            "command": "./principal"
-        },
-        {
-            "label": "Run Project",
-            "type": "shell",
-            "command": "./principal",
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            },
-            "options": {
-                "cwd": "${workspaceFolder}"
-            }
+            "command": "C:\\cygwin64\\bin\\bash.exe",
+            "args": [
+                "-lc",
+                "cd /cygdrive/c/Repos/tecnologo/EDA/Obligatorio && make"
+            ],
+            "problemMatcher": []
         }
     ]
-} 
+}
