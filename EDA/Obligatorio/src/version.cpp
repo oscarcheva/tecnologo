@@ -60,68 +60,58 @@ void crearVersion(Version &version, char *num_version)
 
     if (version->numero_version == NULL)
     {
-        if (numeroVersion != 1)
-            return;
+        if (numeroVersion == 1)
 
+        {
+            Version nueva = crearVersionVacia();
+            nueva->numero_version = crearCadenaVacia();
+            agregarCaracteresCadena(nueva->numero_version, num_version);
+            nueva->siguiente = NULL;
+            nueva->anterior = NULL;
+            version = nueva;
+        }
+    }
+    else
+    {
+        Version actual = version;
         Version nueva = crearVersionVacia();
         nueva->numero_version = crearCadenaVacia();
         agregarCaracteresCadena(nueva->numero_version, num_version);
         nueva->siguiente = NULL;
         nueva->anterior = NULL;
-        version = nueva;
-        return;
-    }
+        int versionActual = atoi(convertirCadenaArregloChar(actual->numero_version));
 
-    Version actual = version;
-    while (actual != NULL)
-    {
-        char *charNumero = convertirCadenaArregloChar(actual->numero_version);
-        int numero = atoi(charNumero);
-        delete[] charNumero;
-
-        if (numero >= numeroVersion)
+        while (actual->siguiente != NULL && versionActual != numeroVersion)
         {
-            numero += 1;
-            destruirCadena(actual->numero_version);
-            actual->numero_version = crearCadenaVacia();
-
-            char buffer[16];
-            snprintf(buffer, sizeof(buffer), "%d", numero);
-            agregarCaracteresCadena(actual->numero_version, buffer);
+            actual = actual->siguiente;
+            versionActual = atoi(convertirCadenaArregloChar(actual->numero_version));
+        }
+        if ((numeroVersion - versionActual) == 1)
+        {
+            nueva->anterior = actual;
+            actual->siguiente = nueva;
         }
 
-        actual = actual->siguiente;
+        else if (versionActual == numeroVersion)
+        {
+            nueva->anterior = actual->anterior;
+            actual->anterior->siguiente = nueva;
+            actual->anterior = nueva;
+            nueva->siguiente = actual;
+            Version proxima = nueva->siguiente;
+            while (proxima != NULL)
+            {
+                int versionActual = atoi(convertirCadenaArregloChar(proxima->numero_version));
+                versionActual++;
+                char versionArray[20];
+                snprintf(versionArray, sizeof(versionArray), "%d", versionActual);
+                destruirCadena(proxima->numero_version);
+                proxima->numero_version = crearCadenaVacia();
+                agregarCaracteresCadena(proxima->numero_version, versionArray);
+                proxima = proxima->siguiente;
+            }
+        }
     }
-
-    Version nueva = crearVersionVacia();
-    nueva->numero_version = crearCadenaVacia();
-    agregarCaracteresCadena(nueva->numero_version, num_version);
-
-    actual = version;
-    Version anterior = NULL;
-    while (actual != NULL)
-    {
-        char *charNumero = convertirCadenaArregloChar(actual->numero_version);
-        int numero = atoi(charNumero);
-        delete[] charNumero;
-
-        if (numero > numeroVersion)
-            break;
-
-        anterior = actual;
-        actual = actual->siguiente;
-    }
-
-    nueva->siguiente = actual;
-    nueva->anterior = anterior;
-
-    if (anterior != NULL)
-        anterior->siguiente = nueva;
-    else
-        version = nueva;
-
-    if (actual != NULL)
-        actual->anterior = nueva;
 }
 
 Version obtenerVersion(Version &version, char *numVersion)
