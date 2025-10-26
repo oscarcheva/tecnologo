@@ -12,11 +12,19 @@ struct _rep_version
 {
     Cadena numero_version;
     Linea inicioLineas;
-    _rep_version *siguiente;
-    _rep_version *anterior;
+    _rep_version *siguienteHermano;
+    _rep_version *primerHijo;
+};
+
+struct _nodo_lista_version
+{
+    Version raizVersion;
+    NodoListaVersion siguienteNodo;
 };
 
 Version crearVersionVacia();
+
+NodoListaVersion crearNodoListaVersion();
 
 void crearVersion(Version &version, char *num_version);
 
@@ -44,90 +52,187 @@ void destruirVersion(Version &version, char *numeroVersion);
 
 void destruirTodasLasVersiones(Version &version);
 
+Version buscarVersionPadre(NodoListaVersion NodoListaVersion, char *numeroVersion);
+
+void crearSubversion(NodoListaVersion NodoListaVersion, char *numeroVersion);
+
+int obtenerUltimoNumeroSubVersion(Cadena numero_version);
+
 Version crearVersionVacia()
 {
     Version version = new _rep_version;
     version->numero_version = NULL;
     version->inicioLineas = NULL;
-    version->siguiente = NULL;
-    version->anterior = NULL;
+    version->siguienteHermano = NULL;
+    version->primerHijo = NULL;
     return version;
 }
 
-void crearVersion(Version &version, char *num_version)
+NodoListaVersion crearNodoListaVersion()
+{
+    NodoListaVersion nuevo = new _nodo_lista_version;
+    nuevo->raizVersion = NULL;
+    nuevo->siguienteNodo = NULL;
+    return nuevo;
+}
+
+void crearVersion(NodoListaVersion &nodoLista, char *num_version)
 {
     int numeroVersion = atoi(num_version);
-
-    if (version->numero_version == NULL)
+    if (num_version[1] != '\0')
     {
-        if (numeroVersion == 1)
-
+        char *versionPadre = strrchr(num_version, '.');
+        if (versionPadre != NULL)
         {
-            Version nueva = crearVersionVacia();
-            nueva->numero_version = crearCadenaVacia();
-            agregarCaracteresCadena(nueva->numero_version, num_version);
-            nueva->siguiente = NULL;
-            nueva->anterior = NULL;
-            version = nueva;
+            *versionPadre = '\0';
         }
+        Version padre = buscarVersionPadre(obtenerVersion(nodoLista, num_version), versionPadre);
+        Version hijo = crearVersionVacia();
+        hijo->numero_version = crearCadenaVacia();
+        agregarCaracteresCadena(hijo->numero_version, num_version);
+        crearSubVersion(padre, hijo, num_version);
+    }
+    NodoListaVersion nodoActual = nodoLista;
+    if (nodoLista->raizVersion == NULL)
+    {
+        Version nuevaVersion = crearVersionVacia();
+        nuevaVersion->numero_version = crearCadenaVacia();
+        agregarCaracteresCadena(nuevaVersion->numero_version, num_version);
+        nodoLista->raizVersion = nuevaVersion;
+    }
+    else if (nodoActual == NULL)
+    {
+        NodoListaVersion nuevoNodo = crearNodoListaVersion();
+        Version nuevaVersion = crearVersionVacia();
+        nuevaVersion->numero_version = crearCadenaVacia();
+        agregarCaracteresCadena(nuevaVersion->numero_version, num_version);
+        nuevoNodo->raizVersion = nuevaVersion;
+        nodoLista->siguienteNodo = nuevoNodo;
     }
     else
     {
-        Version actual = version;
-        Version nueva = crearVersionVacia();
-        nueva->numero_version = crearCadenaVacia();
-        agregarCaracteresCadena(nueva->numero_version, num_version);
-        nueva->siguiente = NULL;
-        nueva->anterior = NULL;
-        int versionActual = atoi(convertirCadenaArregloChar(actual->numero_version));
+        NodoListaVersion nuevoNodo = crearNodoListaVersion();
+        Version nuevaVersion = crearVersionVacia();
+        nuevaVersion->numero_version = crearCadenaVacia();
+        agregarCaracteresCadena(nuevaVersion->numero_version, num_version);
+        nuevoNodo->raizVersion = nuevaVersion;
 
-        while (actual->siguiente != NULL && versionActual != numeroVersion)
+        int numVersionActual = 2;
+        if (numeroVersion == 1)
         {
-            actual = actual->siguiente;
-            versionActual = atoi(convertirCadenaArregloChar(actual->numero_version));
+            nuevoNodo->siguienteNodo = nodoLista;
+            nuevoNodo->raizVersion = nuevaVersion;
+            nodoLista = nuevoNodo;
         }
-        if ((numeroVersion - versionActual) == 1)
+        else
         {
-            nueva->anterior = actual;
-            actual->siguiente = nueva;
-        }
-
-        else if (versionActual == numeroVersion)
-        {
-            nueva->anterior = actual->anterior;
-            actual->anterior->siguiente = nueva;
-            actual->anterior = nueva;
-            nueva->siguiente = actual;
-            Version proxima = nueva->siguiente;
-            while (proxima != NULL)
+            while (nodoActual->siguienteNodo != NULL && numVersionActual != numeroVersion)
             {
-                int versionActual = atoi(convertirCadenaArregloChar(proxima->numero_version));
-                versionActual++;
-                char versionArray[20];
-                snprintf(versionArray, sizeof(versionArray), "%d", versionActual);
-                destruirCadena(proxima->numero_version);
-                proxima->numero_version = crearCadenaVacia();
-                agregarCaracteresCadena(proxima->numero_version, versionArray);
-                proxima = proxima->siguiente;
+                nodoActual = nodoActual->siguienteNodo;
+                numVersionActual++;
+            }
+            if (numeroVersion - numVersionActual <= 1)
+            {
+                nuevoNodo->siguienteNodo = nodoActual->siguienteNodo;
+                nodoActual->siguienteNodo = nuevoNodo;
+                nodoActual = nuevoNodo->siguienteNodo;
+
+                while (nodoActual != NULL)
+                {
+                    Version versionActual = nodoActual->raizVersion;
+
+                    int numeroVersionActual = atoi(convertirCadenaArregloChar(versionActual->numero_version));
+                    numeroVersionActual++;
+
+                    int length = snprintf(NULL, 0, "%d", numeroVersionActual) + 1;
+                    char *versionArray = (char *)malloc(length * sizeof(char));
+                    snprintf(versionArray, length, "%d", numeroVersionActual);
+
+                    destruirCadena(versionActual->numero_version);
+                    versionActual->numero_version = crearCadenaVacia();
+                    agregarCaracteresCadena(versionActual->numero_version, versionArray);
+                    nodoActual = nodoActual->siguienteNodo;
+                    free(versionArray);
+                }
             }
         }
     }
 }
 
-Version obtenerVersion(Version &version, char *numVersion)
+Version buscarVersionPadre(Version version, char *numeroVersionPadre)
 {
-    Version actual = version;
+    if (version == NULL)
+        return NULL;
+
+    char *numVersion = convertirCadenaArregloChar(version->numero_version);
+    printf("Visiting: %s\n", numVersion);
+
+    if (strcmp(numVersion, numeroVersionPadre) == 0)
+    {
+        delete[] numVersion;
+        return version;
+    }
+
+    delete[] numVersion;
+
+    Version encontrado = buscarVersionPadre(version->primerHijo, numeroVersionPadre);
+    if (encontrado != NULL)
+        return encontrado;
+
+    return buscarVersionPadre(version->siguienteHermano, numeroVersionPadre);
+}
+
+Version obtenerVersion(NodoListaVersion &nodoLista, char *numVersion)
+{
+    int numeroVersion = atoi(numVersion);
+    char versionStr[2];
+    sprintf(versionStr, "%d", numeroVersion);
+    NodoListaVersion actual = nodoLista;
     while (actual != NULL)
     {
-        char *numeroActual = convertirCadenaArregloChar(actual->numero_version);
-        bool existe = (strcmp(numVersion, numeroActual) == 0);
-        delete[] numeroActual;
-
+        Version versionActual = actual->raizVersion;
+        char *numeroActual = convertirCadenaArregloChar(versionActual->numero_version);
+        bool existe = (strcmp(versionStr, numeroActual) == 0);
         if (existe)
-            return actual;
-        actual = actual->siguiente;
+        {
+            delete[] numeroActual;
+            return versionActual;
+        }
+        actual = actual->siguienteNodo;
     }
+    delete[] versionStr;
     return NULL;
+}
+
+void crearSubVersion(Version padre, Version hijo, char *numeroVersion)
+{
+    if (padre != NULL)
+        if (padre->primerHijo == NULL)
+            padre->primerHijo = hijo;
+        else
+        {
+            Version actual = padre->primerHijo;
+            while (actual->siguienteHermano != NULL)
+                actual = actual->siguienteHermano;
+
+            int ultimoNumeroHijo = obtenerUltimoNumeroSubVersion(hijo->numero_version);
+            int ultimoNumeroActual = obtenerUltimoNumeroSubVersion(actual->numero_version);
+            if (ultimoNumeroHijo - ultimoNumeroActual == 1)
+            {
+                if (actual->siguienteHermano != NULL)
+                    hijo->siguienteHermano = actual->siguienteHermano;
+                actual->siguienteHermano = hijo;
+            }
+        }
+}
+
+int obtenerUltimoNumeroSubVersion(Cadena numero_version)
+{
+    char *str = convertirCadenaArregloChar(numero_version);
+    char *ultimoPunto = strrchr(str, '.');
+    int numero = (ultimoPunto != NULL) ? atoi(ultimoPunto + 1) : atoi(str);
+    delete[] str;
+    return numero;
 }
 
 void agregarFilaVersion(Version &version, char *numeroVersion, char *textoFila, unsigned int numLinea)
@@ -170,7 +275,7 @@ void imprimirVersion(Version version, char *numeroVersion)
 Version siguienteVersion(Version version)
 {
     Version actual = obtenerVersion(version, nombreVersion(version));
-    return actual->siguiente;
+    return actual->siguienteHermano;
 }
 
 char *nombreVersion(Version version)
@@ -190,9 +295,9 @@ int numeroUltimaVersion(Version version)
 {
     Version actual = obtenerVersion(version, convertirCadenaArregloChar(version->numero_version));
     Version ultima = actual;
-    while (ultima->siguiente != NULL)
+    while (ultima->siguienteHermano != NULL)
     {
-        ultima = ultima->siguiente;
+        ultima = ultima->siguienteHermano;
     }
     char *num_version = convertirCadenaArregloChar(ultima->numero_version);
     int numero = atoi(num_version);
@@ -237,37 +342,34 @@ void eliminarLineaVersion(Version &version, char *numeroVersion, unsigned int nu
 
 void destruirVersion(Version &version, char *numeroVersion)
 {
+    int num_version = atoi(numeroVersion);
     Version actual = obtenerVersion(version, numeroVersion);
-    if (actual == NULL)
-        return;
-    if (actual->anterior != NULL)
-        actual->anterior->siguiente = actual->siguiente;
-    else
-        version = actual->siguiente;
-
-    if (actual->siguiente != NULL)
-        actual->siguiente->anterior = actual->anterior;
-
-    destruirCadena(actual->numero_version);
-    destruirLinea(actual->inicioLineas);
-
-    Version siguiente = actual->siguiente;
-    while (siguiente != NULL)
+    if (actual != NULL)
     {
-        char *charNumero = convertirCadenaArregloChar(siguiente->numero_version);
-        int numero = atoi(charNumero);
-        numero -= 1;
-        int necesario = snprintf(NULL, 0, "%d", numero) + 1;
-        char *nuevoNumero = new char[necesario];
-        snprintf(nuevoNumero, necesario, "%d", numero);
-        destruirCadena(siguiente->numero_version);
-        siguiente->numero_version = crearCadenaVacia();
-        agregarCaracteresCadena(siguiente->numero_version, nuevoNumero);
-        delete[] charNumero;
-        delete[] nuevoNumero;
-        siguiente = siguiente->siguiente;
+        if (actual->primerHijo == NULL && num_version == 1)
+        {
+            actual->siguienteHermano->primerHijo = NULL;
+            version = actual->siguienteHermano;
+        }
+        else
+        {
+            actual->primerHijo->siguienteHermano = actual->siguienteHermano;
+            actual->siguienteHermano->primerHijo = actual->primerHijo;
+        }
+        Version proxima = actual->siguienteHermano;
+        while (proxima != NULL)
+        {
+            int versionActual = atoi(convertirCadenaArregloChar(proxima->numero_version));
+            versionActual--;
+            char versionArray[20];
+            snprintf(versionArray, sizeof(versionArray), "%d", versionActual);
+            destruirCadena(proxima->numero_version);
+            proxima->numero_version = crearCadenaVacia();
+            agregarCaracteresCadena(proxima->numero_version, versionArray);
+            proxima = proxima->siguienteHermano;
+        }
+        delete actual;
     }
-    delete actual;
 }
 
 void destruirTodasLasVersiones(Version &version)
@@ -276,7 +378,7 @@ void destruirTodasLasVersiones(Version &version)
     while (actual != NULL)
     {
         Version aEliminar = actual;
-        actual = actual->siguiente;
+        actual = actual->siguienteHermano;
         destruirCadena(aEliminar->numero_version);
         destruirLinea(aEliminar->inicioLineas);
         delete aEliminar;

@@ -12,11 +12,15 @@
 #define _VERSION_H
 
 typedef struct _rep_version *Version;
+typedef struct _nodo_lista_version *NodoListaVersion;
 
 //***********************  CONSTRUCTORAS ***************** */
 
 // Pos-Cond: Retorna una version vacia
 Version crearVersionVacia();
+
+// Pos-Cond: Retorna un nodo de lista de version vacia
+NodoListaVersion crearNodoListaVersion();
 
 // Pre-Cond: num_version tiene que estar en el rango de 1 o la ultima version + 1 de
 //			la Version "version"
@@ -86,5 +90,11 @@ void destruirVersion(Version &version, char *numeroVersion);
 // Pre-Cond: No tiene
 // Pos-Cond: Elimina toda la memoria reservada por "version"
 void destruirTodasLasVersiones(Version &version);
+
+Version buscarVersionPadre(NodoListaVersion NodoListaVersion, char *numeroVersion);
+
+int obtenerUltimoNumeroSubVersion(Cadena numero_version);
+
+void crearSubversion(Version padre, Version hijo, char *numeroVersion);
 
 #endif

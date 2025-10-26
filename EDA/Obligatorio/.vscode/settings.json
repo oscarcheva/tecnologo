@@ -6,5 +6,9 @@
     "C_Cpp.clang_format_path": "C:/Program Files/LLVM/bin/clang-format.exe",
     "remote.WSL": {
         "C_Cpp.clang_format_path": "/usr/bin/clang-format"
+    },
+    "files.associations": {
+        "*.dbclient-js": "javascript",
+        "chrono": "cpp"
     }
 }
