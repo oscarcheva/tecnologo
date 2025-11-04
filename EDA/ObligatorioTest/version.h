@@ -13,22 +13,27 @@
 #include "cadena.h"
 
 typedef struct _rep_version *Version;
+typedef struct _nodo_lista_version *NodoListaVersion;
 
 //***********************  CONSTRUCTORAS ***************** */
 
 // Pos-Cond: Retorna una version vacia
 Version crearVersionVacia();
 
+// Pos-Cond: Retorna un nodo de lista de version vacia
+NodoListaVersion crearNodoListaVersion();
+
 // Pre-Cond: num_version tiene que estar en el rango de 1 o la ultima version + 1 de
 //			la Version "version"
 // Pos-Cond: Crea una nueva version con el numero de verion "num_version
 //			Las versiones iguales y mayores a num_version se les suma 1 al numero de version.
-void crearVersion(Version &version, char *num_version);
+void crearVersion(NodoListaVersion &version, char *num_version);
 
 //************************ SELECTORAS ********************* */
 
 // Pre-Cond: la Version "numVersion" existe en version
 // Pos-Cond: Retorna un puntero a la version que tiene como numero "numVersion"
+Version obtenerVersion(Version &version, char *numVersion);
 
 // Pre-cond: La version "version" tiene por lo menos "numLinea" de Lineas
 // Pos-Cond: Agrega el string texto como la fila num_fila de la Version "version"
@@ -37,7 +42,7 @@ void agregarFilaVersion(Version &version, char *numeroVersion, char *textoFila, 
 
 // Pre-Cond: existeVersion(version, numeroVersion) retorna true.
 // Pos-Cond: Imprime la Version "nombreVersion"
-void imprimirVersion(Version version);
+void imprimirVersion(Version version, char *numeroVersion);
 
 ////////////////////////////////// AGREGADA 05/09/2025  ////////////
 // Pre-Cond: version != NULL
@@ -58,7 +63,7 @@ int numeroUltimaVersion(Version version);
 ////////////////////////////////// AGREGADA 16/09/2025  ////////////
 // Pre-Cond: No tiene
 // Pos-Cond: retorna un entero con el numero de la ultima linea de la Verison de "version"
-int numeroUltimaLineaVersion(Version version, char *numeroVersion);
+int numeroUltimaLineaVersion(Version version);
 
 //********************* PREDICADOS ************************* */
 
@@ -87,12 +92,15 @@ void destruirVersion(Version &version, char *numeroVersion);
 // Pos-Cond: Elimina toda la memoria reservada por "version"
 void destruirTodasLasVersiones(Version &version);
 
+Version obtenerRaiz(NodoListaVersion nodoLista, char** numVersion);
+
 void crearSubversion(Version padre, Version hijo, char *numeroVersion);
 
-void imprimirVersiones(Version nodoListaVersion);
+Version obtenerVersionPadre(Version nodo, char **numVersion);
 
-void borrarVersion(Version &version, char *numVersion);
+void imprimirVersiones(NodoListaVersion nodoListaVersion);
 
-void imprimirLineasVersion(Version version, char *numeroVersion);
+void imprimirSubversiones(Version version, Cadena numeroVersion);
+
 
 #endif

@@ -1,6 +1,6 @@
 /* 6339682 */ // sustituiir con los 7 dígitos de la cédula
 
-#include "../include/cadena.h"
+#include "cadena.h"
 #include <stddef.h>
 
 struct _nodoCadena
@@ -128,23 +128,9 @@ void agregarCaracterFinalCadena(Cadena &cadena, char caracter)
 
 void eliminarCaracterFinalCadena(Cadena &cadena)
 {
-    if (cadena->inicio == NULL)
-        return; // empty list
+    NodoCadena ultimo = cadena->inicio;
+    while (ultimo->siguiente != NULL)
+        ultimo = ultimo->siguiente;
 
-    // if there's only one node
-    if (cadena->inicio->siguiente == NULL)
-    {
-        delete cadena->inicio;
-        cadena->inicio = NULL;
-        return;
-    }
-
-    // traverse to the second-to-last node
-    NodoCadena actual = cadena->inicio;
-    while (actual->siguiente->siguiente != NULL)
-        actual = actual->siguiente;
-
-    // delete the last node and update the previous node's next pointer
-    delete actual->siguiente;
-    actual->siguiente = NULL;
-}
+    delete ultimo;
+};

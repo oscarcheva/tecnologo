@@ -11,7 +11,7 @@
 struct _rep_archivo
 {
     Cadena nombreArchivo;
-    NodoListaVersion inicioVersion;
+    Version inicioVersion;
 };
 
 Archivo crearArchivoVacio(char *nomArchivo);
@@ -31,8 +31,6 @@ void imprimirVersionArchivo(Archivo archivo, char *numeroVersion);
 void mostrarCambiosArchivo(Archivo archivo, char *numeroVersion);
 
 void mostrarTextoArchivoVersion(Archivo archivo, char *numeroVersion);
-
-unsigned int numeroUltimaVersionArchivo(Archivo archivo);
 
 unsigned int numeroUltimaLinea(Archivo archivo, char *nombreVersion);
 
@@ -61,6 +59,89 @@ void crearVersionArchivo(Archivo &archivo, char *numVersion)
 
     if (archivo->inicioVersion == NULL)
     {
-        archivo->inicioVersion = crearNodoListaVersion();
+        archivo->inicioVersion = crearVersionVacia();
     }
+    crearVersion(archivo->inicioVersion, numVersion);
+}
+
+// void versionIndependienteArchivo(Archivo &archivo, char *numVersion){
+
+// }
+
+char *obtenerNombreArchivo(Archivo archivo)
+{
+    if (archivo == NULL)
+        return NULL;
+    char *nombreArchivo = convertirCadenaArregloChar(archivo->nombreArchivo);
+    return nombreArchivo;
+}
+
+void mostrarVersionesArchivo(Archivo archivo)
+{
+    printf("%s\n", convertirCadenaArregloChar(archivo->nombreArchivo));
+    if (archivo == NULL)
+        return;
+    if (archivo->inicioVersion == NULL)
+        printf("No hay versiones creadas\n");
+    else
+    {
+        Version actual = archivo->inicioVersion;
+        if (actual != NULL)
+        {
+            imprimirVersion(archivo->inicioVersion);
+            actual = siguienteVersion(actual);
+        }
+    }
+}
+
+void insertarLineaVersionDeArchivo(Archivo &archivo, char *numeroVersion, char *textoFila, unsigned int numFila)
+{
+    if (archivo == NULL || !existeVersionEnArchivo(archivo, numeroVersion))
+        return;
+    agregarFilaVersion(archivo->inicioVersion, numeroVersion, textoFila, numFila);
+}
+
+// void mostrarCambiosArchivo(Archivo archivo, char *numeroVersion){
+
+// }
+
+void mostrarTextoArchivoVersion(Archivo archivo, char *numeroVersion)
+{
+    imprimirLineasVersion(archivo->inicioVersion, numeroVersion);
+}
+
+bool existeVersionEnArchivo(Archivo archivo, char *numeroVersion)
+{
+    return existeVersion(archivo->inicioVersion, numeroVersion);
+}
+
+void borrarArchivoCompleto(Archivo &archivo)
+{
+    if (archivo == NULL)
+        return;
+    if (archivo->inicioVersion != NULL)
+        destruirTodasLasVersiones(archivo->inicioVersion);
+    destruirCadena(archivo->nombreArchivo);
+    delete archivo;
+    archivo = NULL;
+}
+
+void borrarVersionDeArchivo(Archivo &archivo, char *numeroVersion)
+{
+    if (archivo == NULL || !existeVersionEnArchivo(archivo, numeroVersion))
+        return;
+    borrarVersion(archivo->inicioVersion, numeroVersion);
+}
+
+void borrarLineaVersionArchivo(Archivo &archivo, char *numeroVersion, unsigned int numFila)
+{
+    if (archivo == NULL || !existeVersionEnArchivo(archivo, numeroVersion))
+        return;
+    eliminarLineaVersion(archivo->inicioVersion, numeroVersion, numFila);
+}
+
+unsigned int numeroUltimaLinea(Archivo archivo, char *nombreVersion)
+{
+
+    return numeroUltimaLineaVersion(archivo->inicioVersion, nombreVersion);
 }

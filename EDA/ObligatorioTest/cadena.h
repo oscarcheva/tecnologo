@@ -1,5 +1,5 @@
 /*
-  Módulo de definición de 'CADENA'.
+Módulo de definición de 'CADENA'.
 
   Los elementos de tipo 'Cadena' son punteros a una estructura (que debe
   definirse en cadena.cpp).
@@ -38,5 +38,7 @@ void destruirCadena(Cadena &cadena);
 void agregarCaracterFinalCadena(Cadena &cadena, char caracter);
 
 void eliminarCaracterFinalCadena(Cadena &cadena);
+
+
 
 #endif
