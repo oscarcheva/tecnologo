@@ -1,0 +1,2 @@
+Compilando principal.cpp 
+make: *** No rule to make target 'src/cadena.cpp', needed by 'obj/cadena.o'.  Stop.

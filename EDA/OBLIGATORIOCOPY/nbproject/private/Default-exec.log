@@ -1,0 +1,13 @@
+called: C:\cygwin64\bin\g++.exe
+	C:\Users\nando\OneDrive\Escritorio\tarea1
+	C:\cygwin64\bin\g++.exe
+	-Wall
+	-Werror
+	-Iinclude
+	-g
+	-DNDEBUG
+	-c
+	principal.cpp
+	-o
+	obj/principal.o
+
