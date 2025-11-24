@@ -1,92 +1,33 @@
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <pthread.h>
 #include <semaphore.h>
-#include <time.h>
+#include <stdio.h>
 
-#define SHM_NAME "/shml"
-#define SHM_SIZE 4096
+#define COUNTER_CAPACITY 27
+#define FRIDGE_CAPACITY 25
 
-// --- Shared memory setup function ---
-int *setup_shared_memory(const char *name, int size)
+// Shared resources
+int counter_plates = 0; // meatballs
+int fridge_desserts = FRIDGE_CAPACITY;
+
+// Mutexes
+pthread_mutex_t m_counter;
+pthread_mutex_t m_fridge;
+
+// Semaphores to manage available/space
+sem_t counter_empty_slots;
+sem_t counter_full_slots;
+sem_t fridge_has_desserts;
+
+// Initialization
+void initialize_shared_resources()
 {
-    int shm_fd = shm_open(name, O_CREAT | O_RDWR, 0666);
-    if (shm_fd == -1)
-    {
-        perror("shm_open");
-        exit(EXIT_FAILURE);
-    }
+    counter_plates = 0;
+    fridge_desserts = FRIDGE_CAPACITY;
 
-    if (ftruncate(shm_fd, size) == -1)
-    {
-        perror("ftruncate");
-        exit(EXIT_FAILURE);
-    }
+    pthread_mutex_init(&m_counter, NULL);
+    pthread_mutex_init(&m_fridge, NULL);
 
-    int *ptr = mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
-    if (ptr == MAP_FAILED)
-    {
-        perror("mmap");
-        exit(EXIT_FAILURE);
-    }
-
-    close(shm_fd); // no longer needed after mmap
-    return ptr;
-}
-
-// --- Main program ---
-int main()
-{
-    const int TOPE = 90000000;
-    const int CANT = 10;
-
-    int i, a, j;
-    int *ptr;
-    sem_t *semS;
-    sem_t *semR;
-
-    srand(time(NULL));
-
-    semS = sem_open("/semS", O_CREAT, 0666, 0); // initially 0
-    if (semS == SEM_FAILED)
-    {
-        perror("sem_open semS");
-        exit(1);
-    }
-
-    semR = sem_open("/semR", O_CREAT, 0666, 0); // initially 0
-    if (semR == SEM_FAILED)
-    {
-        perror("sem_open semR");
-        exit(1);
-    }
-
-    ptr = setup_shared_memory(SHM_NAME, SHM_SIZE);
-
-    *ptr = 10; // Optional: remove if Restador initializes first
-    printf("Sumador - Esperando que el restador inicie\n");
-
-    for (i = 0; i < CANT; i++)
-    {
-        sem_wait(semS); // wait until Restador posts
-        a = *ptr;
-        printf("Sumador lee: %d\n", a);
-        a++;
-        *ptr = a;
-        printf("Sumador graba: %d\n", a);
-        sem_post(semR);
-    }
-
-    printf("Fin Sumador: %d\n", *ptr);
-
-    sem_post(semS); // signal finished
-    sem_close(semS);
-
-    sem_unlink("/semS");
-    sem_unlink("/semR");
-
-    return 0;
+    sem_init(&counter_empty_slots, 0, MESADA);
+    sem_init(&counter_full_slots, 0, 0);
+    sem_init(&fridge_has_desserts, 0, FRIDGE_CAPACITY);
 }
