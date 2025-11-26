@@ -57,7 +57,11 @@ int main()
 
     // Crear memoria compartida
     shm_fd = shm_open("/cantina_shm", O_CREAT | O_RDWR, 0666);
-    ftruncate(shm_fd, sizeof(DatosCompartidos));
+    if (ftruncate(shm_fd, sizeof(DatosCompartidos)) == -1)
+    {
+        perror("ftruncate failed");
+        exit(EXIT_FAILURE);
+    }
     datos = mmap(NULL, sizeof(DatosCompartidos), PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
 
     datos->platos_mesada = 20;  // albóndigas iniciales
