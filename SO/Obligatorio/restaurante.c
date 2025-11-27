@@ -45,9 +45,8 @@ void limpiar(int senal)
 
 int main()
 {
-    signal(SIGINT, limpiar); // Ctrl+C activa limpieza
+    signal(SIGINT, limpiar);
 
-    // Eliminar IPC antiguos si existen
     shm_unlink("/cantina_shm");
     sem_unlink("/m_counter");
     sem_unlink("/m_fridge");
@@ -55,7 +54,6 @@ int main()
     sem_unlink("/counter_full_slots");
     sem_unlink("/fridge_has_desserts");
 
-    // Crear memoria compartida
     shm_fd = shm_open("/cantina_shm", O_CREAT | O_RDWR, 0666);
     if (ftruncate(shm_fd, sizeof(DatosCompartidos)) == -1)
     {
@@ -67,7 +65,6 @@ int main()
     datos->platos_mesada = 20;  // albóndigas iniciales
     datos->postres_nevera = 18; // postres iniciales
 
-    // Crear semáforos
     mutex_mesada = sem_open("/m_counter", O_CREAT, 0644, 1);
     mutex_nevera = sem_open("/m_fridge", O_CREAT, 0644, 1);
     mesada_vacia = sem_open("/counter_empty_slots", O_CREAT, 0644, CAPACIDAD_MESADA - datos->platos_mesada);
@@ -76,10 +73,9 @@ int main()
 
     printf("Cantina inicializada.\n");
     printf("Comenzando con %d albóndigas y %d postres.\n", datos->platos_mesada, datos->postres_nevera);
-    printf("Presione Ctrl+C para salir y limpiar recursos.\n");
 
     while (1)
-        sleep(1); // mantener proceso vivo
+        sleep(1);
 
     return 0;
 }
