@@ -1,0 +1,16 @@
+HTTP/2 301 
+date: Wed, 28 Jan 2026 01:05:12 GMT
+content-length: 0
+location: https://twitter.com/
+perf: 7402827104
+cache-control: no-cache, no-store, max-age=0
+x-transaction-id: 0771cd0c3561f563
+x-response-time: 1
+origin-cf-ray: 9c4c9485dc60010c-GRU
+strict-transport-security: max-age=631138519; includeSubdomains
+x-served-by: t4_a
+server: cloudflare envoy
+cf-cache-status: DYNAMIC
+set-cookie: __cf_bm=c.VWC5CAy_WR6L9LR_Rk.5AFDc1pnZKJ14MNH_lJ.8Q-1769562312.6143663-1.0.1.1-kY26f.MIhRGOZcmAC9RydDzDI0HnhwmSWAsHP9ZdfetDZaks3sK6s5DwHTjHD8R937LLWnx4UIhIMMRWSPg.DuS0OJp0BizxrE6sOErI340COkE4oI_EK_NEMVQEylTf; HttpOnly; Secure; Path=/; Domain=twitter.com; Expires=Wed, 28 Jan 2026 01:35:12 GMT
+cf-ray: 9c4c9485dc60010c-GRU
+

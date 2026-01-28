@@ -1,0 +1,14 @@
+HTTP/2 200 
+server: Apple
+content-type: text/html; charset=utf-8
+x-frame-options: SAMEORIGIN
+x-xss-protection: 1; mode=block
+x-content-type-options: nosniff
+strict-transport-security: max-age=31536000; includeSubdomains; preload
+referrer-policy: no-referrer-when-downgrade
+content-security-policy: default-src 'self' blob: data: *.akamaized.net *.apple.com *.apple-mapkit.com *.cdn-apple.com *.organicfruitapps.com; child-src blob: mailto: embed.music.apple.com embed.podcasts.apple.com https://recyclingprogram.apple.com https://smb.apple.com https://nova.apple.com swdlp.apple.com www.apple.com www.instagram.com platform.twitter.com www.youtube-nocookie.com; img-src 'unsafe-inline' blob: data: *.apple.com *.apple-mapkit.com *.cdn-apple.com *.mzstatic.com; script-src 'unsafe-inline' 'unsafe-eval' blob: *.apple.com *.apple-mapkit.com www.instagram.com platform.twitter.com; style-src 'unsafe-inline' *.apple.com
+cache-control: max-age=73
+expires: Wed, 28 Jan 2026 01:06:28 GMT
+date: Wed, 28 Jan 2026 01:05:15 GMT
+set-cookie: geo=BR; path=/; domain=.apple.com
+

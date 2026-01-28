@@ -1,0 +1,5 @@
+HTTP/2 301 
+content-length: 0
+location: https://github.com/
+strict-transport-security: max-age=31536000; includeSubDomains; preload
+

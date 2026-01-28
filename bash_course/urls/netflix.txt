@@ -1,0 +1,25 @@
+HTTP/2 405 
+server: envoy
+x-frame-options: DENY
+allow: GET, OPTIONS, POST
+date: Wed, 28 Jan 2026 01:05:14 GMT
+x-envoy-upstream-service-time: 46
+x-b3-traceid: 697960ca4fba7ff92a58acfb3d2fd96b
+x-request-id: 4b086a72-f400-4f2f-8950-e6f8daea90f3
+x-envoy-decorator-operation: lo_svc
+via: 2 i-076549e9182e44e9e (us-east-1)
+x-xss-protection: 1; mode=block; report=https://www.netflix.com/ichnaea/log/freeform/xssreport
+x-content-type-options: nosniff
+strict-transport-security: max-age=31536000; includeSubDomains
+x-originating-url: http://www.netflix.com/
+edge-control: no-cache, no-store
+cache-control: no-cache, no-store
+set-cookie: nfvdid=BQFmAAEBEM9LJaGvc2zwd3b4ufWt7pZArfFSsdrMnz0s-c3glW4N5dTNFXxqe558_nmqWK1KJv9_EyQUh-BisWMg36BO9K1FshJB0wD-vkSlRm3u_VDs1w%3D%3D; Domain=.netflix.com; Path=/; Max-Age=31536000
+set-cookie: SecureNetflixId=v%3D3%26mac%3DAQEAEQABABQsJcC3teRAnkUsIzZlV5LnCete8WYLbMM.%26dt%3D1769562314519; Domain=.netflix.com; Expires=Thu, 28 Jan 2027 01:05:14 GMT; Path=/; HttpOnly; Secure; SameSite=Strict
+set-cookie: NetflixId=v%3D3%26ct%3DBgjHlOvcAxLBAZxgyfUDv3xxoHQqwbccxdRGPYQ1zXsXhEZKoIveC5s9qr7mWFGvQpU4xBh4X3gYh8H0xnHw13ByuDJ1xMcPLjjIxQRGb4bvgA1Z7cxJ4e7QjSnTDqrXkC1fwlhaNKHExStA3Pzxbqt5ifm1COjEUB-sFuQzp5t5ObxzSFRv8Gus5tgTnPxdLinu-kNt8kpI24ubhxANgrQdKQyFuRf_nNXaTtuIIpZ8gkSNmb7IFxS0aQT4SWLBjF3RVdr9oR7ohbYYBiIOCgzB0JjpGM70Yk9zWNQ.; Domain=.netflix.com; Expires=Thu, 28 Jan 2027 01:05:14 GMT; Path=/; HttpOnly; Secure; SameSite=Lax
+x-netflix-cookieandmsl.profileguid.match: NA
+x-netflix-headerandcookie.profileguid.match: NA
+x-netflix-headerandmsl.profileguid.match: NA
+x-netflix.nfstatus: 1_1
+x-netflix.proxy.execution-time: 59
+

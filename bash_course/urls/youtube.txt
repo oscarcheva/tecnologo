@@ -1,0 +1,32 @@
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+x-content-type-options: nosniff
+cache-control: no-cache, no-store, max-age=0, must-revalidate
+pragma: no-cache
+expires: Mon, 01 Jan 1990 00:00:00 GMT
+date: Wed, 28 Jan 2026 01:05:11 GMT
+content-length: 0
+p3p: CP="This is not a P3P policy! See http://support.google.com/accounts/answer/151657?hl=pt-BR for more info."
+x-frame-options: SAMEORIGIN
+strict-transport-security: max-age=31536000
+report-to: {"group":"youtube_main","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/youtube_main"}]}
+content-security-policy: require-trusted-types-for 'script'
+accept-ch: Sec-CH-Viewport-Width, Sec-CH-DPR
+vary: Sec-CH-Viewport-Width, Sec-CH-DPR
+content-security-policy-report-only: report-uri https://csp.withgoogle.com/csp/youtube_main/strict;base-uri 'self';object-src 'none';script-src 'nonce-FgveYyupOCXXTB3r2LTWuA' 'unsafe-inline' 'strict-dynamic' https: http: 'unsafe-eval'
+permissions-policy: ch-ua-arch=*, ch-ua-bitness=*, ch-ua-full-version=*, ch-ua-full-version-list=*, ch-ua-model=*, ch-ua-wow64=*, ch-ua-form-factors=*, ch-ua-platform=*, ch-ua-platform-version=*
+origin-trial: AmhMBR6zCLzDDxpW+HfpP67BqwIknWnyMOXOQGfzYswFmJe+fgaI6XZgAzcxOrzNtP7hEDsOo1jdjFnVr2IdxQ4AAAB4eyJvcmlnaW4iOiJodHRwczovL3lvdXR1YmUuY29tOjQ0MyIsImZlYXR1cmUiOiJXZWJWaWV3WFJlcXVlc3RlZFdpdGhEZXByZWNhdGlvbiIsImV4cGlyeSI6MTc1ODA2NzE5OSwiaXNTdWJkb21haW4iOnRydWV9
+origin-trial: AiDEBptUfVeO93q48VdVMe/ubupazdAl8AaHP+NBzdnW8quUcHdzJUyGSfrmtpKJu7EOvwRp9ug2rEo3XU+WMAMAAAB2eyJvcmlnaW4iOiJodHRwczovL3lvdXR1YmUuY29tOjQ0MyIsImZlYXR1cmUiOiJEZXZpY2VCb3VuZFNlc3Npb25DcmVkZW50aWFsczIiLCJleHBpcnkiOjE3NzQzMTA0MDAsImlzU3ViZG9tYWluIjp0cnVlfQ==
+cross-origin-opener-policy: same-origin-allow-popups; report-to="youtube_main"
+reporting-endpoints: default="/web-reports?context=eJwN0X1MlWUcxvEevrPgHDzPeZ77_gWKW45wrclxRxpsbjnSJTQ3XtaqmVgQeCgmcvJ0OAmjwlb5xix8w5NlWg1YkLpaLSUy08QX4lUmMlhb6ZyD4dSpbOX0_uPz53Xt2i7P6VlvPVhvZbxQY615KmKt6H_HasqLWndbo9b3XVGr6mitNTU_ZpWkx6x9IzGr-u-N1gH_qoSNc1cldK32UFnp4U7cw81xD3U3PJQs9DK80stUoZef27x0_eBl4pqX7NpkrhfPpjs-m8yXfLQf81Hc46PZmL7vo2GJTc5Sm1jIxhuz-XyrzeIWm8RDNinnbboz_CSW-fEYQ_v9JB3xM37Pz2vKoSzbYYfxxcsOE6UOBW86NDQ4fGQs3-Fw4juHtMMO6qLDvOsO_8w4vIrLWJ7Lg5Uu7S-6FJS4XAu7_HHCZWmfS26_y7NDLgsuudiXXVJnXJIeUxTNVRSkKTqeUKh0RV6GIpCtCD2nmClSeMKKXcbHEcXVRsWyzYqSPYr6NkVCp-Kc8euPirLjipMXFH9eNB2jijpjwaRi9y3F__8pNvk0xSmaOTma5HxN-lpNeVTzymea9-Oa34zDBzV_faMZMga-1Qwbezs1q7s1pcaK3zUVpzRnejRTRsc5TU2v5tiAZnLQGNZsGdG0j2rWj2mevmJydzRfPiLkzhLm-YUWLYwYzz8uPJkqfDVH6E8Tflko9BgtmcJtozcgHAoKE_nCJ68L8XVCICL8GxO664TWemHNe8KHRv0HwvZGoXqLcMAY3CZMNwnPfCoUNgvWHmGD0RcX87UwfFA4_bVwpEM4Y1wy9ncKvqNm50_C2VOCm5zYc_LqhUf9Z49f2Ul6oC5cG60tDy16N1QeqIyEa6KBUM3aQEWkKlpV8UZ1aVYwKye4OCtnUXBJ6dvBh1724RQ"
+document-policy: include-js-call-stacks-in-crash-reports
+server: ESF
+x-xss-protection: 0
+set-cookie: __Secure-YNID=15.YT=FUGf7wH5aCaLVf1U0fRqaA6BmC-z7M2QwWM3vmyEPk7apTDxPUNdzy13AgVGzpiQNpwTMCjJcx_uQipbmqx2Zk8F2yoKg-C_GBcAuJMJcwvncv7JrZGeXeLkCoGuew4lYgGC5zfKZUB2lwarjKWwwV0nOTnkLrWChEoRxIT_8Nb5aIUnTLuK_nEl9ZQ7110IANk9mbpYVqvTS0UHWzIZ_10Be_o5bHiIVgdLO75oyLlxB-8C3qpXBAi67CdJ8vNoDeP5qxj6phYL7Tw2Lz31FXOrYrPztki7RXQRmfLaM7_u5v_CFJ2s9ZP7LoCPW-73kNjyOcBeMoRLSH4mZa9mDw; expires=Mon, 27-Jul-2026 01:05:11 GMT; path=/; domain=.youtube.com; Secure; HttpOnly; SameSite=none
+set-cookie: GPS=1; Domain=.youtube.com; Expires=Wed, 28-Jan-2026 01:35:11 GMT; Path=/; Secure; HttpOnly
+set-cookie: YSC=hBWowVMKqzY; Domain=.youtube.com; Path=/; Secure; HttpOnly; SameSite=none
+set-cookie: __Secure-YEC=; Domain=.youtube.com; Expires=Thu, 04-May-2023 01:05:11 GMT; Path=/; Secure; HttpOnly; SameSite=lax
+set-cookie: VISITOR_INFO1_LIVE=90kvzVvLSNg; Domain=.youtube.com; Expires=Mon, 27-Jul-2026 01:05:11 GMT; Path=/; Secure; HttpOnly; SameSite=none
+set-cookie: VISITOR_PRIVACY_METADATA=CgJCUhIEGgAgPQ%3D%3D; Domain=.youtube.com; Expires=Mon, 27-Jul-2026 01:05:11 GMT; Path=/; Secure; HttpOnly; SameSite=none
+set-cookie: __Secure-ROLLOUT_TOKEN=CJiokai8xf_V1gEQlbf8p4WtkgMYlbf8p4WtkgM%3D; Domain=youtube.com; Expires=Mon, 27-Jul-2026 01:05:11 GMT; Path=/; Secure; HttpOnly; SameSite=none; Partitioned
+

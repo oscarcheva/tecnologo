@@ -1,0 +1,10 @@
+HTTP/2 200 
+server: AkamaiGHost
+mime-version: 1.0
+content-type: text/html
+content-length: 421
+expires: Wed, 28 Jan 2026 01:05:14 GMT
+cache-control: max-age=0, no-cache, no-store
+pragma: no-cache
+date: Wed, 28 Jan 2026 01:05:14 GMT
+
